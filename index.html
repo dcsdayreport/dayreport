@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCS Daily Report</title>
+
+<style>
+body{font-family:Arial;background:#f4f6f9;margin:0}
+.container{padding:20px}
+#loginBox{width:300px;margin:50px auto;padding:20px;background:#fff;border:1px solid #ccc;box-shadow:2px 2px 8px rgba(0,0,0,0.1);}
+#loginBox input{width:100%;padding:8px;margin:5px 0}
+#loginBox button{width:100%;padding:8px;background:#004080;color:#fff;border:none;cursor:pointer}
+#loginBox button:hover{background:#0066cc}
+
+.home-header{text-align:center;margin-bottom:15px}
+.home-header img{height:70px;margin-bottom:5px}
+.home-header h2,.home-header h3,.home-header h4{margin:3px 0;color:#004080}
+.print-header{display:none;text-align:center;margin-bottom:10px}
+.print-header img{height:70px;margin-bottom:5px}
+
+.search-box{display:flex;gap:10px;justify-content:center;margin-bottom:15px;flex-wrap:wrap}
+input,select{padding:6px}
+button{padding:6px 14px;background:#004080;color:#fff;border:none;cursor:pointer}
+button:hover{background:#0066cc}
+
+#printDateRange{color:red;font-weight:bold;font-size:16px}
+
+.form-report{width:100%;border-collapse:collapse;background:#89f1e4;}
+.form-report td{border:1px solid #000;padding:8px;font-size:14px;}
+.label{font-weight:bold;width:25%}
+.value{text-align:center;width:25%}
+.value.number{font-weight:bold;background:#c8f19a}
+
+@media print{
+body *{visibility:hidden}
+#printable,#printable *{visibility:visible}
+#printable{position:absolute;left:0;top:0;width:100%}
+.no-print{display:none}
+.print-header{display:block}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div id="loginBox">
+    <h3 style="text-align:center;color:#004080;">Login</h3>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="mainContent" style="display:none;">
+<div class="home-header no-print">
+    <img src="daily.png">
+    <h2>NEPAL ELECTRICITY AUTHORITY</h2>
+    <h4>DCS DAILY REPORT</h4>
+</div>
+
+<div class="search-box no-print">
+    <input type="text" id="fromDate" placeholder="From Date (YYYY-MM-DD)">
+    <input type="text" id="toDate" placeholder="To Date (YYYY-MM-DD)">
+    <select id="dcsSelect">
+        <option value="" selected disabled>Select DCS</option>
+        <option value="ALL">All DCS</option>
+        <option>DharanDcs</option>
+        <option>BiratnagarDcs</option>
+        <option>DuhabiDcs</option>
+        <option>TaplejungDcs</option>
+        <option>KhadbariDcs</option>
+        <option>DhankutaDcs</option>
+        <option>TerhathumDcs</option>
+        <option>PachatharDcs</option>
+        <option>OkhaldhungaDcs</option>
+        <option>BhojpurDcs</option>
+        <option>InaruwaDcs</option>
+        <option>ItahariDcs</option>
+        <option>DamakDcs</option>
+        <option>UrlabariDcs</option>   
+        <option>SolukhumbuDcs</option>
+        <option>UdayapurDcs</option>            
+        <option>bhadrapurDcs</option>
+        <option>AnarmaniDcs</option>
+        <option>IlamDcs</option>
+        <option>GauradahaDcs</option>
+        <option>DiktelDcs</option>
+        <option>RangeliDcs</option>
+        <option>BelbariDcs</option>
+        <option>DhulabariDcs</option>
+    </select>
+    <button onclick="filterData()">Search</button>
+    <button onclick="downloadExcel()">Excel Download</button>
+    <button onclick="printReport()">Print</button>
+</div>
+
+<div id="printable">
+    <div class="print-header">
+        <img src="daily.png">
+        <h2>DCS DAILY REPORT</h2>
+    </div>
+    <div style="text-align:center;margin-bottom:10px">
+        <span id="printDateRange"></span>
+    </div>
+    <table class="form-report" id="reportTable"></table>
+</div>
+
+</div>
+</div>
+
+<script>
+function login(){
+    if(username.value==="nea" && password.value==="nea"){
+        loginBox.style.display="none";
+        mainContent.style.display="block";
+        fetchData();
+    }else alert("Invalid login");
+}
+
+let allData=[],filteredRows=[];
+function normalizeDate(d){return d?d.replace(/[./-]/g,'-'):'';}
+
+/* Headers that should always show 0.00 + Indian comma */
+const amountHeaders = [
+ "ला_का_रकम",
+ "रि_क_असुलि_रकम",
+ "औसत_रकम",
+ "कालोपाटि_असुलि_रकम",
+ "चुवावट बाट असुल गरियकाे रकम"
+];
+
+/* Headers where 1 digit only (integer) */
+const intHeaders = [
+ "ला_का_सख्या","रि_क_सख्या",
+ "सिस्टममा_लिङ्क_भयको_लगत_फाईल_सख्या",
+ "चुवावट भेटियकाे वा समातियकाे स‌ख्या",
+ "मिटर रिडिङ्ग छड्के बाट भेटियाको कैफियत स‌ख्या"
+];
+
+async function fetchData(){
+    const url="https://script.google.com/macros/s/AKfycbxmJsKeMD4PgwWI4WLSMUSGk64v8B9qOliWbAMrBKjMsPIOD4EkuTvJ7sXx8rIgT3_2/exec";
+    allData=await (await fetch(url)).json();
+}
+
+function filterData(){
+    const fr=fromDate.value.trim();
+    const tr=toDate.value.trim();
+    const dcs=dcsSelect.value;
+
+    if(!fr||!tr){alert("पहिले From Date / To Date राख्नुहाेस् ।।।");return;}
+    if(!dcs){alert("DCS select गर्नुहोस्");return;}
+
+    const f=normalizeDate(fr),t=normalizeDate(tr);
+
+    filteredRows=allData.filter(r=>{
+        const d=normalizeDate(r["मिति"]);
+        const dcsName=(r["वितरण केन्द्रकाे नाम"]||"").toLowerCase();
+        return d>=f && d<=t && (dcs==="ALL" || dcsName===dcs.toLowerCase());
+    });
+
+    if(!filteredRows.length){
+        alert("Data भेटिएन");
+        reportTable.innerHTML="";
+        printDateRange.textContent="";
+        return;
+    }
+
+    const dateText = (f===t)?fr:`${fr} देखि ${tr}`;
+    const sumData={},keys=Object.keys(filteredRows[0]);
+
+    keys.forEach(k=>{
+        if(k==="मिति"){sumData[k]=dateText; return;}
+        if(k==="वितरण केन्द्रकाे नाम"){sumData[k]=(dcs==="ALL")?"All DCS":dcs; return;}
+
+        let total=0,num=false;
+        let textsSet=new Set();
+
+        filteredRows.forEach(r=>{
+            const v=r[k];
+            const val=parseFloat(v);
+            if(!isNaN(val)){total+=val; num=true;}
+            else if(v===0 || v==="0"){total+=0; num=true;}
+            else if(v!==null && v!==undefined && v.toString().trim()!==""){textsSet.add(v.toString().trim());}
+        });
+
+        if(num){
+            if(amountHeaders.includes(k)){
+                sumData[k] = total.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+            }else if(intHeaders.includes(k)){
+                sumData[k] = Math.round(total);
+            }else{
+                sumData[k] = Math.round(total);
+            }
+        }else{
+            sumData[k]=Array.from(textsSet).join(", ");
+        }
+    });
+
+    printDateRange.textContent=(dcs==="ALL"?"All DCS":dcs)+" | "+dateText;
+
+    renderForm(sumData);
+}
+
+function renderForm(data){
+    reportTable.innerHTML="";
+    const k=Object.keys(data);
+    for(let i=0;i<k.length;i+=2){
+        const val1=data[k[i]]; 
+        const val2=data[k[i+1]]??"";
+        reportTable.innerHTML+=`
+        <tr>
+            <td class="label">${k[i]}</td>
+            <td class="value ${!isNaN(val1.toString().replace(/,/g,''))?'number':''}">${val1}</td>
+            <td class="label">${k[i+1]??""}</td>
+            <td class="value ${k[i+1] && !isNaN(val2.toString().replace(/,/g,''))?'number':''}">${val2}</td>
+        </tr>`;
+    }
+}
+
+function downloadExcel(){
+    if(!filteredRows.length){alert("पहिले Data Search गर्नुहास् ।।।");return;}
+    let html="<table border='1'><tr>";
+    Object.keys(filteredRows[0]).forEach(h=>html+=`<th>${h}</th>`);
+    html+="</tr>";
+    filteredRows.forEach(r=>{
+        html+="<tr>";
+        Object.keys(r).forEach(k=>html+=`<td>${r[k]!==undefined?r[k]:""}</td>`);
+        html+="</tr>";
+    });
+    html+="</table>";
+    const a=document.createElement("a");
+    a.href='data:application/vnd.ms-excel,'+encodeURIComponent(html);
+    a.download="DCS_Report.xls";
+    a.click();
+}
+
+function printReport(){
+    if(!filteredRows.length){alert("पहिले Data Search गर्नुहास् ।।।");return;}
+    window.print();
+}
+</script>
+</body>
+</html>
