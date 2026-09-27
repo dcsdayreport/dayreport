@@ -2,242 +2,865 @@
 <html lang="ne">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCS Daily Report</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nepal Electricity Authority - DCS Daily Report</title>
 <style>
-body{font-family:Arial;background:#f4f6f9;margin:0}
-.container{padding:20px}
-#loginBox{width:300px;margin:50px auto;padding:20px;background:#fff;border:1px solid #ccc;box-shadow:2px 2px 8px rgba(0,0,0,0.1);}
-#loginBox input{width:100%;padding:8px;margin:5px 0}
-#loginBox button{width:100%;padding:8px;background:#004080;color:#fff;border:none;cursor:pointer}
-#loginBox button:hover{background:#0066cc}
+  
+  :root{
+    --bg-image-url: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=60');
+    --nea-blue:#004aad;
+    --nea-blue-dark:#00306e;
+    --nea-green:#1a9c4c;
+    --nea-red:#c31c1c;
+    --nea-pink:#e91e63; 
+    --clock-blue:#0057ff;
+    --card-radius:16px;
+  }
+  *{box-sizing:border-box; font-family:'Segoe UI', 'Noto Sans Devanagari', Arial, sans-serif;}
+  
+  html,body{margin:0;padding:0;min-height:100vh;display:flex;flex-direction:column;background:#eef3f9;}
 
-.home-header{text-align:center;margin-bottom:15px}
-.home-header img{height:70px;margin-bottom:5px}
-.home-header h2,.home-header h3,.home-header h4{margin:3px 0;color:#004080}
-.print-header{display:none;text-align:center;margin-bottom:10px}
-.print-header img{height:70px;margin-bottom:5px}
+  
+  .top-header{
+    background:linear-gradient(135deg, var(--nea-blue), var(--nea-blue-dark));
+    color:#fff;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+    flex-wrap:wrap;
+  }
+  
+  .clock-box{
+    font-size:28px;
+    font-weight:800;
+    color:var(--clock-blue);
+    background:#fff;
+    padding:4px 12px;
+    border-radius:12px;
+    min-width:170px;
+    text-align:center;
+    box-shadow:inset 0 0 0 3px #cfe0ff;
+    letter-spacing:1px;
+  }
+  .header-titles{
+    text-align:center;
+    flex:1;
+    min-width:240px;
+  }
+  .header-titles h1{margin:0; font-size:22px; font-weight:800; text-shadow:1px 1px 2px rgba(0,0,0,0.35);}
+  .header-titles h2{margin:2px 0; font-size:16px; font-weight:600; color:#dfeaff;}
+  .header-titles h3{margin:2px 0; font-size:14px; font-weight:600; color:#ffe27a;}
+  .logo-badge{
+    width:70px; height:70px;
+    border-radius:50%;
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 4px #fff, 0 4px 10px rgba(0,0,0,0.35);
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .logo-badge img{ width:100%; height:100%; object-fit:cover; }
 
-.search-box{display:flex;gap:10px;justify-content:center;margin-bottom:15px;flex-wrap:wrap}
-input,select{padding:6px}
-button{padding:6px 14px;background:#004080;color:#fff;border:none;cursor:pointer}
-button:hover{background:#0066cc}
+  
+  .menu-bar{
+    background:var(--nea-green);
+    display:flex;
+    justify-content:flex-start;
+    gap:6px;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:5;
+    padding-left:10px;
+  }
+  .menu-item{
+    position:relative;
+  }
+  .menu-btn{
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    padding:12px 20px;
+    cursor:pointer;
+    transition:0.2s;
+  }
+  .menu-btn:hover{background:rgba(255,255,255,0.18);}
+  .submenu{
+    display:none;
+    position:absolute;
+    top:100%; left:0;
+    background:#fff;
+    min-width:180px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    border-radius:0 0 10px 10px;
+    overflow:hidden;
+  }
+  .menu-item.open .submenu{display:block;}
+  .submenu button{
+    display:block; width:100%; text-align:left;
+    background:#fff; border:none; padding:12px 18px;
+    font-size:14px; cursor:pointer; color:var(--nea-blue-dark); font-weight:600;
+  }
+  .submenu button:hover{background:#eaf2ff;}
 
-#printDateRange{color:red;font-weight:bold;font-size:16px}
+  
+  .main-area{
+    flex:1;
+    min-height:60vh;
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), var(--bg-image-url);
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    padding:20px 10px 40px;
+  }
+  .card{
+    max-width:1000px;
+    margin:0 auto 20px;
+    background:#fff;
+    border-radius:var(--card-radius);
+    box-shadow:0 6px 22px rgba(0,0,0,0.18);
+    padding:18px 16px;
+  }
+  .card h2{margin-top:0; color:var(--nea-blue-dark); border-bottom:3px solid var(--nea-green); padding-bottom:8px; font-size:18px;}
 
-.form-report{width:100%;border-collapse:collapse;background:#89f1e4;}
-.form-report td{border:1px solid #000;padding:8px;font-size:14px;}
-.label{font-weight:bold;width:25%}
-.value{text-align:center;width:25%}
-.value.number{font-weight:bold;background:#c8f19a}
+  
+  #section-home.card{
+    max-width:480px;
+    margin:30px auto;
+    text-align:center;
+    background:rgba(255,255,255,0.96);
+    padding:24px 20px;
+    position:relative;
+  }
+  .notice-close{
+    position:absolute; top:10px; right:12px;
+    background:#eee; border:none; border-radius:50%;
+    width:28px; height:28px; font-weight:800; cursor:pointer; color:#555;
+    line-height:1;
+  }
+  .notice-close:hover{ background:var(--nea-red); color:#fff; }
+  .home-card p{font-size:15px; line-height:1.7; color:#333; margin:0;}
 
-@media print{
-body *{visibility:hidden}
-#printable,#printable *{visibility:visible}
-#printable{position:absolute;left:0;top:0;width:100%}
-.no-print{display:none}
-.print-header{display:block}
-}
+  .field-row{
+    display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; align-items:flex-end;
+  }
+  .field{ display:flex; flex-direction:column; gap:5px; flex:1; min-width:150px;}
+  .field label{font-weight:700; color:var(--nea-blue-dark); font-size:13px;}
+  .field input, .field select{
+    padding:9px 10px; border-radius:10px; border:2px solid #cfe0ff; font-size:14px; width:100%;
+  }
+  .field input:focus, .field select:focus{outline:none; border-color:var(--nea-blue);}
+  .btn{
+    padding:10px 18px; border:none; border-radius:10px; font-weight:700; font-size:14px;
+    cursor:pointer; color:#fff; transition:0.2s;
+  }
+  .btn-primary{background:var(--nea-blue);}
+  .btn-primary:hover{background:var(--nea-blue-dark);}
+  .btn-green{background:var(--nea-green);}
+  .btn-green:hover{background:#137a3a;}
+  .btn-red{background:var(--nea-red);}
+  .btn-red:hover{background:#8f1414;}
+  
+  .btn-pink{background:var(--nea-pink); color:#fff;}
+  .btn-pink:hover{background:#c2185b;}
+  
+  .btn-outline{background:#fff; color:var(--nea-blue); border:2px solid var(--nea-blue);}
+  .notice{
+    background:#fff8e1; border:2px solid #ffca28; padding:10px 14px; border-radius:10px;
+    color:#7a5b00; font-weight:600; margin-bottom:12px; font-size:14px;
+  }
+  .grid-fields{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:12px;
+  }
+  fieldset.form-group{
+    border:2px solid #d8e6ff;
+    border-radius:12px;
+    margin:0 0 16px 0;
+    padding:14px 14px 8px;
+    background:#f8fbff;
+  }
+  fieldset.form-group legend{
+    padding:2px 8px;
+    font-weight:800;
+    color:#fff;
+    background:var(--nea-blue);
+    border-radius:8px;
+    font-size:13px;
+  }
+  .kv-table{width:100%; border-collapse:collapse; margin-bottom:12px;}
+  .kv-table td{padding:8px; border-bottom:1px solid #e5e5e5; font-size:13px;}
+  .kv-table td:first-child{font-weight:700; color:var(--nea-blue-dark); width:55%;}
+
+  
+  #reportPrintArea{ background:#fff; padding:12px; border-radius:12px; overflow-x:auto; }
+  .report-header{ text-align:center; color:var(--nea-blue-dark); font-weight:800; margin-bottom:10px; position:relative; }
+  .report-header .logo-badge{ position:absolute; left:0; top:-4px; width:48px; height:48px;}
+  .report-header h2{margin:2px 0; font-size:17px;}
+  .report-header h3{margin:2px 0; font-size:13px;}
+  .report-meta{ font-size:14px; font-weight:800; color:var(--nea-red); margin-bottom:10px; text-align:center; }
+  
+  .kv-report-table{ width:100%; border-collapse:collapse; margin-top:6px; min-width:300px; }
+  .kv-report-table td{ border:2px solid #fff; padding:10px 8px; font-weight:700; font-size:12px; word-break:break-word; }
+  .kv-report-table td.kv-label{ background:#a2a1b4; color:#0c0c0c; width:28%; }
+  .kv-report-table td.kv-value{ background:#69c582; color:#0d0e0d; width:22%; text-align:center; }
+  .report-toolbar{ display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+
+  @media(max-width: 768px) {
+    .top-header{ padding:10px; justify-content:center; text-align:center; }
+    .clock-box{ font-size:24px; min-width:140px; padding:2px 8px; }
+    .header-titles h1{ font-size:18px; }
+    .header-titles h2{ font-size:14px; }
+    .header-titles h3{ font-size:12px; }
+    .logo-badge{ width:50px; height:50px; }
+    .report-header .logo-badge{ width:40px; height:40px; }
+    .card{ padding:14px 10px; }
+    .field-row{ gap:8px; }
+    .field{ min-width:100%; }
+    .btn{ width:100%; text-align:center; padding:12px; }
+    .field-row .btn { width:100%; }
+    .kv-report-table td { font-size:11.5px; padding:8px 5px; }
+  }
+
+  
+  .footer{
+    background:var(--nea-blue-dark);
+    color:#fff;
+    text-align:center;
+    padding:12px;
+    font-size:13px;
+  }
+  .footer .line2{color:#ffe27a; font-weight:700; margin-top:3px;}
+  .footer a{color:#9fd8ff; text-decoration:none; font-weight:600;}
+  .footer a:hover{text-decoration:underline;}
+
+  .hidden{display:none !important;}
+
+  
+  .toast{
+    position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-15px);
+    padding:14px 24px; border-radius:12px; font-weight:800; font-size:15px;
+    color:#fff; z-index:99999; box-shadow:0 8px 22px rgba(0,0,0,0.35);
+    opacity:0; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease;
+    text-align:center; max-width:90vw;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.success{ background:var(--nea-green); }
+  .toast.error{ background:var(--nea-red); }
+
+  @media print{
+    .top-header, .menu-bar, .footer, .no-print{display:none !important;}
+    .main-area{background:none !important; padding:0;}
+    .card{box-shadow:none; padding:0;}
+    .kv-report-table td{ font-size:11px; padding:6px 6px; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
 
-<div id="loginBox">
-    <h3 style="text-align:center;color:#004080;">Login</h3>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-</div>
-
-<div id="mainContent" style="display:none;">
-<div class="home-header no-print">
-    <img src="daily.png">
-    <h2>NEPAL ELECTRICITY AUTHORITY</h2>
-    <h4>DCS DAILY REPORT</h4>
-</div>
-
-<div class="search-box no-print">
-    <input type="text" id="fromDate" placeholder="From Date (YYYY-MM-DD)">
-    <input type="text" id="toDate" placeholder="To Date (YYYY-MM-DD)">
-    <select id="dcsSelect">
-        <option value="" selected disabled>Select DCS</option>
-        <option value="ALL">All DCS</option>
-        <option>DharanDcs</option>
-        <option>BiratnagarDcs</option>
-        <option>DuhabiDcs</option>
-        <option>TaplejungDcs</option>
-        <option>KhadbariDcs</option>
-        <option>DhankutaDcs</option>
-        <option>TerhathumDcs</option>
-        <option>PachatharDcs</option>
-        <option>OkhaldhungaDcs</option>
-        <option>BhojpurDcs</option>
-        <option>InaruwaDcs</option>
-        <option>ItahariDcs</option>
-        <option>DamakDcs</option>
-        <option>UrlabariDcs</option>   
-        <option>SolukhumbuDcs</option>
-        <option>UdayapurDcs</option>            
-        <option>bhadrapurDcs</option>
-        <option>AnarmaniDcs</option>
-        <option>IlamDcs</option>
-        <option>GauradahaDcs</option>
-        <option>DiktelDcs</option>
-        <option>RangeliDcs</option>
-        <option>BelbariDcs</option>
-        <option>DhulabariDcs</option>
-    </select>
-    <button onclick="filterData()">Search</button>
-    <button onclick="downloadExcel()">Excel Download</button>
-    <button onclick="printReport()">Print</button>
-</div>
-
-<div id="printable">
-    <div class="print-header">
-        <img src="daily.png">
-        <h2>DCS DAILY REPORT</h2>
+  
+  <div class="top-header">
+    <div class="logo-badge"><img id="logoImg" src="dayreportapp.png" alt="Logo"></div>
+    <div class="header-titles">
+      <h1>Nepal Electricity Authority</h1>
+      <h2>Koshi Province, Biratnagar</h2>
+      <h3>DCS Daily Report</h3>
     </div>
-    <div style="text-align:center;margin-bottom:10px">
-        <span id="printDateRange"></span>
-    </div>
-    <table class="form-report" id="reportTable"></table>
-</div>
+    <div class="clock-box" id="liveClock">--:--:-- --</div>
+  </div>
 
-</div>
-</div>
+  
+  <div class="menu-bar">
+    <div class="menu-item">
+      <button class="menu-btn" onclick="goHome()">Home</button>
+    </div>
+    <div class="menu-item" id="dataEntryMenuItem">
+      <button class="menu-btn" onclick="toggleSubmenu('dataEntryMenuItem')">Data Entry ▾</button>
+      <div class="submenu">
+        <button onclick="openNewDataEntry()">New Data Entry</button>
+      </div>
+    </div>
+    <div class="menu-item">
+      <button class="menu-btn" onclick="openReportSection()">Report</button>
+    </div>
+  </div>
+
+  
+  <div class="main-area">
+
+    
+    <div class="card home-card" id="section-home">
+      <button class="notice-close" onclick="document.getElementById('section-home').classList.add('hidden')" title="Close">✕</button>
+      <h2>स्वागत छ</h2>
+      <p>यो प्रणाली मार्फत DCS हरूको दैनिक विवरण दर्ता (Data Entry) र प्रतिवेदन (Report) हेर्न सकिन्छ।
+      माथिको मेनुबाट <b>Data Entry → New Data Entry</b> मार्फत डाटा राख्नुहोस्, वा <b>Report</b> मेनुबाट पुरानो डाटा हेर्नुहोस्।</p>
+    </div>
+
+    
+    <div class="card hidden" id="section-entry-search">
+      <h2>New Data Entry - आफुले Entry गर्न चाहेको मिति खोज्नुहोस् पहिला !!!</h2>
+      <div class="field-row">
+        <div class="field">
+          <!-- [COMMENTS: Requirement #3] सबै date box हरूमा yyyy.mm.dd भनेर देखाइएको छ -->
+          <label>मिति (YYYY.MM.DD) *</label>
+          <input type="text" id="entrySearchDate" placeholder="YYYY.MM.DD">
+        </div>
+        <div class="field">
+          <label>बितरन केन्द्रको नाम (DCS) *</label>
+          <select id="entrySearchDcs"><option value="">--DCS छान्नुहोस् --</option></select>
+        </div>
+        <div class="field" style="flex:0;">
+          <button class="btn btn-primary" onclick="doSearchEntry()">Search</button>
+        </div>
+      </div>
+      <div id="entrySearchResult"></div>
+    </div>
+
+    
+    <div class="card hidden" id="section-entry-form">
+      <h2 id="entryFormTitle">Data Entry Form</h2>
+      <div class="field-row">
+        <div class="field"><label>बितरन केन्द्रको नाम (DCS)</label><input type="text" id="formDcsDisplay" disabled></div>
+        <div class="field"><label>मिति (YYYY.MM.DD)</label><input type="text" id="formDateDisplay" disabled placeholder="2083.06.01"></div>
+      </div>
+      <div id="formFieldsContainer"></div>
+      <div class="field-row" style="margin-top:10px;">
+        <div class="field">
+          <label>Security Code *</label>
+          <input type="password" id="formSecurityCode" placeholder="Security Code अनिवार्य" autocomplete="off">
+        </div>
+      </div>
+      <div class="field-row">
+        <button class="btn btn-green" onclick="doSubmitEntry()">Submit</button>
+        <button class="btn btn-outline" onclick="goHome()">Cancel / Close</button>
+      </div>
+    </div>
+
+    
+    <div class="card hidden" id="section-report">
+      <h2 class="no-print">Report</h2>
+      <div class="field-row no-print">
+        <div class="field">
+          <!-- [COMMENTS: Requirement #3] From Date र To Date बक्सहरूमा yyyy.mm.dd स्पष्ट देखिने गरी राखिएको छ -->
+          <label>From Date (YYYY.MM.DD) *</label>
+          <input type="text" id="reportFromDate" placeholder="YYYY.MM.DD">
+        </div>
+        <div class="field">
+          <label>To Date (YYYY.MM.DD) *</label>
+          <input type="text" id="reportToDate" placeholder="YYYY.MM.DD">
+        </div>
+        <div class="field">
+          <label>बितरन केन्द्रको नाम (DCS) *</label>
+          <select id="reportDcs"><option value="">-- DCS छान्नुहोस् --</option></select>
+        </div>
+      </div>
+      <div class="field-row no-print">
+        <button class="btn btn-primary" onclick="doReportSearch('range')">Search</button>
+        <button class="btn btn-outline" onclick="doReportSearch('today')">Today</button>
+        <button class="btn btn-outline" onclick="doReportSearch('weekly')">Weekly</button>
+        <button class="btn btn-outline" onclick="doReportSearch('monthly')">Monthly</button>
+        <button class="btn btn-green" id="btnExcelDownload" style="display:none;" onclick="downloadReportExcel()">Excel Download</button>
+        
+        <button class="btn btn-pink" id="btnPrintReport" style="display:none;" onclick="triggerReportPrint()">Print</button>
+        <button class="btn btn-red" onclick="closeReportResult(); goHome();">Closed (Home)</button>
+      </div>
+      <div id="reportResultArea"></div>
+    </div>
+
+  </div>
+
+  
+  <div class="footer">
+    <div>System Developed by: Dharan Dcs Team</div>
+    <div class="line2">Contact No:- 984245962</div>
+  </div>
+
+  <div id="toastBox" class="toast"></div>
 
 <script>
-function login(){
-    if(username.value==="nea" && password.value==="nea"){
-        loginBox.style.display="none";
-        mainContent.style.display="block";
-        fetchData();
-    }else alert("Invalid login");
-}
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1rIYqFPGBvwLAR12zhM0fzfwNiC6p1-L-SZjukxU6N5HUP40tlo8TPIyuaXsTi1HA6w/exec";
+  const LOGO_URL = "dayreportapp.png";
 
-let allData=[],filteredRows=[];
-function normalizeDate(d){return d?d.replace(/[./-]/g,'-'):'';}
+  function callApi(action, data){
+    const payload = Object.assign({ action: action }, data || {});
+    return fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(function(res){ return res.json(); });
+  }
 
-/* Headers that should always show 0.00 + Indian comma */
-const amountHeaders = [
- "ला_का_रकम",
- "रि_क_असुलि_रकम",
- "औसत_रकम",
- "कालोपाटि_असुलि_रकम",
- "चुवावट बाट असुल गरियकाे रकम"
-];
+  let FIELD_HEADERS = [];
+  let DCS_HEADER = "बितरन केन्द्रको नाम";
+  let DATE_HEADER = "मिति";
+  let CODE_HEADER = "security code";
+  let DCS_LIST = [];
+  let currentEditRow = null;
 
-/* Headers where 1 digit only (integer) */
-const intHeaders = [
- "ला_का_सख्या","रि_क_सख्या",
- "सिस्टममा_लिङ्क_भयको_लगत_फाईल_सख्या",
- "चुवावट भेटियकाे वा समातियकाे स‌ख्या",
- "मिटर रिडिङ्ग छड्के बाट भेटियाको कैफियत स‌ख्या"
-];
+  const FALLBACK_DCS_LIST = [
+    "DharanDcs","BiratnagarDcs","DuhabiDcs","TaplejungDcs","KhadbariDcs",
+    "DhankutaDcs","TerhathumDcs","PachatharDcs","OkhaldhungaDcs","BhojpurDcs",
+    "InaruwaDcs","ItahariDcs","DamakDcs","UrlabariDcs","SolukhumbuDcs",
+    "UdayapurDcs","BhadrapurDcs","AnarmaniDcs","IlamDcs","GauradahaDcs",
+    "DiktelDcs","RangeliDcs","BelbariDCs","DhulabariDcs"
+  ];
+  const FALLBACK_FIELD_HEADERS = [
+    "ला_का_संख्या","ला_का_रकम","रि_क_संख्या","रि_क_असुलि_रकम",
+    "Reconnections बापत उठेको सेवा सुल्क रकम",
+    "नयाँ_ग्राहक_कायम_लगत_संख्या_सिङ्गल_फेज","नयाँ_ग्राहक_कायम_लगत_संख्या_थ्री_फेज",
+    "मिटर_बदलि_संख्या_सिङ्गल_फेज","मिटर_बदलि_संख्या_थ्री_फेज",
+    "औसत_युनिट","औसत_रकम","कालोपाटि_असुलि_संख्या","कालोपाटि_असुलि_रकम",
+    "सिस्टममा_लिङ्क_भयको_लगत_फाईल_संख्या","क्षमता_बृद्दि_संख्या",
+    "रिसिलिङ् भयकाे संख्या","रिसिलिङ् बाट सुधार भयकाे संख्या",
+    "मिटर रिडिङ्ग छड्के गरियकाे संख्या","मिटर रिडिङ्ग छड्के बाट भेटियकाे कैफियत संख्या",
+    "मिटर रिडिङ्ग छड्के बाट भेटियकाे कैफियतकाे विवरण",
+    "चुवावट भेटियकाे वा समातियकाे संख्या","चुवावट बाट असुल गरियकाे रकम",
+    "बितरन केन्द्रको नाम","मिति","security code"
+  ];
 
-async function fetchData(){
-    const url="https://script.google.com/macros/s/AKfycbxmJsKeMD4PgwWI4WLSMUSGk64v8B9qOliWbAMrBKjMsPIOD4EkuTvJ7sXx8rIgT3_2/exec";
-    allData=await (await fetch(url)).json();
-}
+  const FIELD_GROUPS = [
+    { title: "१. लाइन कटौती / जडान", headers: ["ला_का_संख्या","ला_का_रकम"] },
+    { title: "२. Reconnection", headers: ["रि_क_संख्या","रि_क_असुलि_रकम","Reconnections बापत उठेको सेवा सुल्क रकम"] },
+    { title: "३. नयाँ ग्राहक कायम लगत", headers: ["नयाँ_ग्राहक_कायम_लगत_संख्या_सिङ्गल_फेज","नयाँ_ग्राहक_कायम_लगत_संख्या_थ्री_फेज"] },
+    { title: "४. मिटर बदली", headers: ["मिटर_बदलि_संख्या_सिङ्गल_फेज","मिटर_बदलि_संख्या_थ्री_फेज"] },
+    { title: "५. औसत बिलिङ", headers: ["औसत_युनिट","औसत_रकम"] },
+    { title: "६. कालोपाटि असुली", headers: ["कालोपाटि_असुलि_संख्या","कालोपाटि_असुलि_रकम"] },
+    { title: "७. लगत / क्षमता", headers: ["सिस्टममा_लिङ्क_भयको_लगत_फाईल_संख्या","क्षमता_बृद्दि_संख्या"] },
+    { title: "८. रिसिलिङ्", headers: ["रिसिलिङ् भयकाे संख्या","रिसिलिङ् बाट सुधार भयकाे संख्या"] },
+    { title: "९. मिटर रिडिङ्ग छड्के", headers: ["मिटर रिडिङ्ग छड्के गरियकाे संख्या","मिटर रिडिङ्ग छड्के बाट भेटियकाे कैफियत संख्या","मिटर रिडिङ्ग छड्के बाट भेटियकाे कैफियतकाे विवरण"] },
+    { title: "१०. चुवावट", headers: ["चुवावट भेटियकाे वा समातियकाे संख्या","चुवावट बाट असुल गरियकाे रकम"] }
+  ];
 
-function filterData(){
-    const fr=fromDate.value.trim();
-    const tr=toDate.value.trim();
-    const dcs=dcsSelect.value;
+  let toastTimer = null;
+  function showToast(message, isSuccess){
+    const box = document.getElementById('toastBox');
+    box.textContent = message;
+    box.className = 'toast show ' + (isSuccess ? 'success' : 'error');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ box.className = 'toast'; }, 3200);
+  }
 
-    if(!fr||!tr){alert("पहिले From Date / To Date राख्नुहाेस् ।।।");return;}
-    if(!dcs){alert("DCS select गर्नुहोस्");return;}
+  window.onload = function () {
+    document.getElementById('logoImg').src = LOGO_URL;
+    callApi('getInitData', {}).then(initApp).catch(function(err){
+      initApp({ dcsList: FALLBACK_DCS_LIST, fieldHeaders: FALLBACK_FIELD_HEADERS, dcsHeader:"बितरन केन्द्रको नाम", dateHeader:"मिति", codeHeader:"security code" });
+    });
+    startClock();
+  };
 
-    const f=normalizeDate(fr),t=normalizeDate(tr);
+  function initApp(data) {
+    DCS_LIST = (data.dcsList && data.dcsList.length) ? data.dcsList : FALLBACK_DCS_LIST;
+    FIELD_HEADERS = (data.fieldHeaders && data.fieldHeaders.length) ? data.fieldHeaders : FALLBACK_FIELD_HEADERS;
+    DCS_HEADER = data.dcsHeader || "बितरन केन्द्रको नाम";
+    DATE_HEADER = data.dateHeader || "मिति";
+    CODE_HEADER = data.codeHeader || "security code";
+    fillDcsSelect('entrySearchDcs');
+    fillDcsSelect('reportDcs');
+  }
 
-    filteredRows=allData.filter(r=>{
-        const d=normalizeDate(r["मिति"]);
-        const dcsName=(r["वितरण केन्द्रकाे नाम"]||"").toLowerCase();
-        return d>=f && d<=t && (dcs==="ALL" || dcsName===dcs.toLowerCase());
+  function fillDcsSelect(id) {
+    const sel = document.getElementById(id);
+    DCS_LIST.forEach(function (name) {
+      const opt = document.createElement('option');
+      opt.value = name; opt.textContent = name;
+      sel.appendChild(opt);
+    });
+  }
+
+  function startClock() {
+    function tick() {
+      const now = new Date();
+      let h = now.getHours();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12; if (h === 0) h = 12;
+      const hh = h < 10 ? '0' + h : h;
+      const mm = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
+      const ss = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds();
+      document.getElementById('liveClock').textContent = hh + ':' + mm + ':' + ss + ' ' + ampm;
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  function hideAllSections() {
+    ['section-home','section-entry-search','section-entry-form','section-report'].forEach(function(id){
+      document.getElementById(id).classList.add('hidden');
+    });
+    closeAllSubmenus();
+  }
+  function closeAllSubmenus(){
+    document.querySelectorAll('.menu-item.open').forEach(function(el){ el.classList.remove('open'); });
+  }
+  function toggleSubmenu(id){
+    const el = document.getElementById(id);
+    const wasOpen = el.classList.contains('open');
+    closeAllSubmenus();
+    if(!wasOpen) el.classList.add('open');
+  }
+
+  function goHome(){
+    hideAllSections();
+    resetEntrySearch();
+    resetReport();
+    document.getElementById('section-home').classList.remove('hidden');
+  }
+  function openNewDataEntry(){
+    hideAllSections();
+    resetEntrySearch();
+    document.getElementById('section-entry-search').classList.remove('hidden');
+  }
+  function openReportSection(){
+    hideAllSections();
+    resetReport();
+    document.getElementById('section-report').classList.remove('hidden');
+  }
+  function resetEntrySearch(){
+    document.getElementById('entrySearchDate').value = '';
+    document.getElementById('entrySearchDcs').value = '';
+    document.getElementById('entrySearchResult').innerHTML = '';
+  }
+  function resetReport(){
+    document.getElementById('reportFromDate').value='';
+    document.getElementById('reportToDate').value='';
+    document.getElementById('reportDcs').value='';
+    document.getElementById('reportResultArea').innerHTML='';
+    document.getElementById('btnExcelDownload').style.display = 'none';
+    document.getElementById('btnPrintReport').style.display = 'none';
+    currentReportRecord = null;
+  }
+
+  function doSearchEntry(){
+    const date = document.getElementById('entrySearchDate').value.trim();
+    const dcs = document.getElementById('entrySearchDcs').value;
+    if(!date || !dcs){
+      alert('मिति र DCS नाम दुवै अनिवार्य छन्।');
+      return;
+    }
+    document.getElementById('entrySearchResult').innerHTML = '<p>कृपया पर्खनुहोस् Data खोजी हुँदैछ...</p>';
+    callApi('searchEntry', { dcsName: dcs, dateStr: date }).then(onSearchEntryResult).catch(onServerError);
+  }
+
+  function onSearchEntryResult(res){
+    const box = document.getElementById('entrySearchResult');
+    if(!res.success){ box.innerHTML = ''; alert(res.message); return; }
+
+    if(res.found){
+      const d = res.data;
+      let html = '<div class="notice">डाटा फेला पर्‍यो — मिति: <b>'+escapeHtml(d[DATE_HEADER])+'</b>, DCS: <b>'+escapeHtml(d[DCS_HEADER])+'</b></div>';
+      html += '<table class="kv-table">';
+      FIELD_HEADERS.forEach(function(h){
+        if(h===DATE_HEADER || h===CODE_HEADER || h===DCS_HEADER) return;
+        html += '<tr><td>'+escapeHtml(h)+'</td><td>'+escapeHtml(d[h])+'</td></tr>';
+      });
+      html += '</table>';
+      html += '<button class="btn btn-primary" onclick=\'openEntryForm(true)\'>Edit</button>';
+      box.innerHTML = html;
+      currentEditRow = d;
+    } else {
+      let html = '<div class="notice">'+escapeHtml(res.message)+'</div>';
+      html += '<button class="btn btn-green" onclick="openEntryForm(false)">नयाँ डाटा राख्नुहोस्</button>';
+      box.innerHTML = html;
+      currentEditRow = { _normDate: res.normDate };
+    }
+  }
+
+  function openEntryForm(isEdit){
+    const dcs = document.getElementById('entrySearchDcs').value;
+    const date = isEdit ? currentEditRow[DATE_HEADER] : currentEditRow._normDate;
+
+    document.getElementById('formDcsDisplay').value = dcs;
+    document.getElementById('formDateDisplay').value = date;
+    document.getElementById('entryFormTitle').textContent = isEdit ? 'Edit / Re-update Data' : 'नयाँ Data Entry Form';
+    document.getElementById('formSecurityCode').value = '';
+
+    const container = document.getElementById('formFieldsContainer');
+    container.innerHTML = '';
+    const placedHeaders = {};
+
+    FIELD_GROUPS.forEach(function(group){
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'form-group';
+      const legend = document.createElement('legend');
+      legend.textContent = group.title;
+      fieldset.appendChild(legend);
+
+      const grid = document.createElement('div');
+      grid.className = 'grid-fields';
+      group.headers.forEach(function(h){
+        if(FIELD_HEADERS.indexOf(h) === -1) return;
+        placedHeaders[h] = true;
+        grid.appendChild(buildFieldInput(h, isEdit));
+      });
+      fieldset.appendChild(grid);
+      container.appendChild(fieldset);
     });
 
-    if(!filteredRows.length){
-        alert("Data भेटिएन");
-        reportTable.innerHTML="";
-        printDateRange.textContent="";
-        return;
+    const leftover = FIELD_HEADERS.filter(function(h){
+      return h!==DATE_HEADER && h!==CODE_HEADER && h!==DCS_HEADER && !placedHeaders[h];
+    });
+    if(leftover.length){
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'form-group';
+      const legend = document.createElement('legend');
+      legend.textContent = 'अन्य विवरण';
+      fieldset.appendChild(legend);
+      const grid = document.createElement('div');
+      grid.className = 'grid-fields';
+      leftover.forEach(function(h){ grid.appendChild(buildFieldInput(h, isEdit)); });
+      fieldset.appendChild(grid);
+      container.appendChild(fieldset);
     }
 
-    const dateText = (f===t)?fr:`${fr} देखि ${tr}`;
-    const sumData={},keys=Object.keys(filteredRows[0]);
+    hideAllSections();
+    document.getElementById('section-entry-form').classList.remove('hidden');
+  }
 
-    keys.forEach(k=>{
-        if(k==="मिति"){sumData[k]=dateText; return;}
-        if(k==="वितरण केन्द्रकाे नाम"){sumData[k]=(dcs==="ALL")?"All DCS":dcs; return;}
+  function safeId(h){ return h.replace(/[^a-zA-Z0-9_]/g,'_'); }
 
-        let total=0,num=false;
-        let textsSet=new Set();
+  function buildFieldInput(h, isEdit){
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    const label = document.createElement('label');
+    label.textContent = h;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'f_' + safeId(h);
+    input.dataset.header = h;
+    if(isEdit && currentEditRow && currentEditRow[h] !== undefined) input.value = currentEditRow[h];
+    wrap.appendChild(label); wrap.appendChild(input);
+    return wrap;
+  }
 
-        filteredRows.forEach(r=>{
-            const v=r[k];
-            const val=parseFloat(v);
-            if(!isNaN(val)){total+=val; num=true;}
-            else if(v===0 || v==="0"){total+=0; num=true;}
-            else if(v!==null && v!==undefined && v.toString().trim()!==""){textsSet.add(v.toString().trim());}
+  function doSubmitEntry(){
+    const dcs = document.getElementById('formDcsDisplay').value;
+    const date = document.getElementById('formDateDisplay').value;
+    const code = document.getElementById('formSecurityCode').value.trim();
+
+    if(!/^\d{4}\.\d{2}\.\d{2}$/.test(date)){
+      alert('मिति फर्म्याट गलत छ! yyyy.mm.dd फर्म्याटमा मात्र राख्नुहोस्।');
+      return;
+    }
+    if(!code){ alert('Security Code अनिवार्य छ।'); return; }
+
+    const payload = {};
+    payload[DCS_HEADER] = dcs;
+    payload[DATE_HEADER] = date;
+    payload[CODE_HEADER] = code;
+
+    FIELD_HEADERS.forEach(function(h){
+      if(h===DATE_HEADER || h===CODE_HEADER || h===DCS_HEADER) return;
+      const el = document.getElementById('f_' + safeId(h));
+      payload[h] = el ? el.value : '';
+    });
+
+    callApi('submitEntry', { payload: payload }).then(onSubmitEntryResult).catch(onServerError);
+  }
+
+  function onSubmitEntryResult(res){
+    showToast(res.message, res.success);
+    if(res.success){ openNewDataEntry(); }
+  }
+
+  function doReportSearch(mode){
+    const dcs = document.getElementById('reportDcs').value;
+    if(!dcs){ alert('DCS नाम अनिवार्य छ।'); return; }
+    let fromDate = document.getElementById('reportFromDate').value.trim();
+    let toDate = document.getElementById('reportToDate').value.trim();
+
+    if(!hasServerFieldsOk_(mode, fromDate, toDate)) return;
+    document.getElementById('reportResultArea').innerHTML = '<p>कृपया पर्खनुहोस् Data खोजी हुँदैछ....</p>';
+    callApi('getReportData', { dcsName: dcs, fromDate: fromDate, toDate: toDate, mode: mode })
+      .then(onReportResult).catch(onServerError);
+  }
+  function hasServerFieldsOk_(mode, fromDate, toDate){
+    if(mode === 'range' && (!fromDate || !toDate)){ alert('From Date र To Date दुवै अनिवार्य छन्। समय छान्नुहोस्।'); return false; }
+    return true;
+  }
+
+  let currentReportRecord = null;
+  let currentReportHeaders = [];
+  let currentReportMeta = { dcsName:'', fromDate:'', toDate:'' };
+
+  function onReportResult(res){
+    const box = document.getElementById('reportResultArea');
+    if(!res.success){ 
+      box.innerHTML=''; 
+      currentReportRecord=null; 
+      document.getElementById('btnExcelDownload').style.display = 'none';
+      document.getElementById('btnPrintReport').style.display = 'none';
+      alert(res.message); 
+      return; 
+    }
+
+    const isSingleDay = (res.fromDate === res.toDate);
+    const headers = FIELD_HEADERS;
+    let record = null;
+
+    if(res.rows.length === 0){
+      currentReportRecord = null;
+      document.getElementById('btnExcelDownload').style.display = 'none';
+      document.getElementById('btnPrintReport').style.display = 'none';
+      box.innerHTML = buildReportHeaderHtml(res) + '<div class="notice">तपाइले खाेज्नु भएकाे मितिकाे डाटा फेला परेन।</div>';
+      return;
+    }
+
+    if(isSingleDay){
+      record = res.rows[0];
+    } else {
+      record = mergeRowsToSummary(res.rows, headers);
+      record[DATE_HEADER] = res.fromDate + ' देखि ' + res.toDate + ' सम्म';
+    }
+
+    currentReportRecord = record;
+    currentReportHeaders = headers;
+    currentReportMeta = { dcsName: res.dcsName, fromDate: res.fromDate, toDate: res.toDate };
+
+    document.getElementById('btnExcelDownload').style.display = 'inline-block';
+    document.getElementById('btnPrintReport').style.display = 'inline-block';
+
+    let html = buildReportHeaderHtml(res);
+    html += '<table class="kv-report-table">';
+    
+    const filteredHeaders = headers.filter(function(h){
+      return h !== CODE_HEADER && h !== DCS_HEADER && h !== DATE_HEADER;
+    });
+
+    for(let i=0; i<filteredHeaders.length; i+=2){
+      const h1 = filteredHeaders[i], h2 = filteredHeaders[i+1];
+      html += '<tr>';
+      html += '<td class="kv-label">'+escapeHtml(h1)+'</td><td class="kv-value">'+formatValue(record[h1], h1)+'</td>';
+      if(h2 !== undefined){
+        html += '<td class="kv-label">'+escapeHtml(h2)+'</td><td class="kv-value">'+formatValue(record[h2], h2)+'</td>';
+      } else {
+        html += '<td class="kv-label"></td><td class="kv-value"></td>';
+      }
+      html += '</tr>';
+    }
+    html += '</table></div>';
+    box.innerHTML = html;
+  }
+
+  function buildReportHeaderHtml(res){
+    const metaText = (res.fromDate === res.toDate)
+      ? escapeHtml(res.dcsName) + ' | ' + escapeHtml(res.fromDate)
+      : escapeHtml(res.dcsName) + ' | ' + escapeHtml(res.fromDate) + ' देखि ' + escapeHtml(res.toDate) + ' सम्म';
+    let html = '<div id="reportPrintArea">';
+    html += '<div class="report-header"><div class="logo-badge"><img src="'+LOGO_URL+'" alt="Logo"></div>';
+    html += '<h2>Nepal Electricity Authority</h2><h3>Koshi Province, Biratnagar</h3><h3>DCS Daily Report</h3></div>';
+    html += '<div class="report-meta">'+metaText+'</div>';
+    return html;
+  }
+
+  function mergeRowsToSummary(rows, headers){
+    const merged = {};
+    headers.forEach(function(h){
+      if(h === DCS_HEADER){ merged[h] = rows[0][DCS_HEADER]; return; }
+      if(h === DATE_HEADER){ merged[h] = ''; return; }
+      if(h === CODE_HEADER){ return; }
+      if(h.indexOf('विवरण') !== -1){
+        const vals = [];
+        rows.forEach(function(r){
+          const v = (r[h]||'').toString().trim();
+          if(v && vals.indexOf(v) === -1) vals.push(v);
         });
-
-        if(num){
-            if(amountHeaders.includes(k)){
-                sumData[k] = total.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
-            }else if(intHeaders.includes(k)){
-                sumData[k] = Math.round(total);
-            }else{
-                sumData[k] = Math.round(total);
-            }
-        }else{
-            sumData[k]=Array.from(textsSet).join(", ");
-        }
+        merged[h] = vals.join('; ');
+        return;
+      }
+      let sum = 0;
+      rows.forEach(function(r){
+        const v = parseFloat(r[h]);
+        if(!isNaN(v)) sum += v;
+      });
+      merged[h] = (h === "ला_का_रकम" || h === "रि_क_असुलि_रकम" || h === "Reconnections बापत उठेको सेवा सुल्क रकम" || h === "औसत_रकम" || h === "कालोपाटि_असुलि_रकम" || h === "चुवावट बाट असुल गरियकाे रकम") ? sum.toFixed(2) : sum;
     });
+    return merged;
+  }
 
-    printDateRange.textContent=(dcs==="ALL"?"All DCS":dcs)+" | "+dateText;
+  function closeReportResult(){
+    document.getElementById('reportResultArea').innerHTML = '';
+    document.getElementById('btnExcelDownload').style.display = 'none';
+    document.getElementById('btnPrintReport').style.display = 'none';
+    currentReportRecord = null;
+  }
 
-    renderForm(sumData);
-}
-
-function renderForm(data){
-    reportTable.innerHTML="";
-    const k=Object.keys(data);
-    for(let i=0;i<k.length;i+=2){
-        const val1=data[k[i]]; 
-        const val2=data[k[i+1]]??"";
-        reportTable.innerHTML+=`
-        <tr>
-            <td class="label">${k[i]}</td>
-            <td class="value ${!isNaN(val1.toString().replace(/,/g,''))?'number':''}">${val1}</td>
-            <td class="label">${k[i+1]??""}</td>
-            <td class="value ${k[i+1] && !isNaN(val2.toString().replace(/,/g,''))?'number':''}">${val2}</td>
-        </tr>`;
+  function downloadReportExcel(){
+    if(!currentReportRecord){
+      alert('पहिले Search गरेर Report निकाल्नुहोस्।');
+      return;
     }
-}
-
-function downloadExcel(){
-    if(!filteredRows.length){alert("पहिले Data Search गर्नुहास् ।।।");return;}
-    let html="<table border='1'><tr>";
-    Object.keys(filteredRows[0]).forEach(h=>html+=`<th>${h}</th>`);
-    html+="</tr>";
-    filteredRows.forEach(r=>{
-        html+="<tr>";
-        Object.keys(r).forEach(k=>html+=`<td>${r[k]!==undefined?r[k]:""}</td>`);
-        html+="</tr>";
+    let csv = '\uFEFF';
+    csv += 'Nepal Electricity Authority\nKoshi Province, Biratnagar\nDCS Daily Report\n';
+    csv += currentReportMeta.dcsName + ' | ' +
+      (currentReportMeta.fromDate === currentReportMeta.toDate
+        ? currentReportMeta.fromDate
+        : currentReportMeta.fromDate + ' देखि ' + currentReportMeta.toDate + ' सम्म') + '\n\n';
+    currentReportHeaders.forEach(function(h){
+      if(h === CODE_HEADER || h === DCS_HEADER || h === DATE_HEADER) return;
+      const v = (currentReportRecord[h] !== undefined ? currentReportRecord[h] : '').toString();
+      csv += '"'+h.replace(/"/g,'""')+'","'+v.replace(/"/g,'""')+'"\n';
     });
-    html+="</table>";
-    const a=document.createElement("a");
-    a.href='data:application/vnd.ms-excel,'+encodeURIComponent(html);
-    a.download="DCS_Report.xls";
-    a.click();
-}
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    const fnameDate = (currentReportMeta.fromDate === currentReportMeta.toDate)
+      ? currentReportMeta.fromDate
+      : currentReportMeta.fromDate + '_to_' + currentReportMeta.toDate;
+    link.download = currentReportMeta.dcsName + '_' + fnameDate + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
-function printReport(){
-    if(!filteredRows.length){alert("पहिले Data Search गर्नुहास् ।।।");return;}
+  function triggerReportPrint(){
     window.print();
-}
+  }
+
+ 
+  function formatValue(val, header){
+    if(val === undefined || val === null || val === '') return '';
+    
+    
+    const targetAmountHeaders = [
+      "ला_का_रकम", 
+      "रि_क_असुलि_रकम", 
+      "Reconnections बापत उठेको सेवा सुल्क रकम", 
+      "औसत_रकम", 
+      "कालोपाटि_असुलि_रकम", 
+      "चुवावट बाट असुल गरियकाे रकम"
+    ];
+
+    if(targetAmountHeaders.includes(header)){
+      let num = parseFloat(val);
+      if(!isNaN(num)){
+        let parts = num.toFixed(2).split('.');
+        
+        let intPart = parts[0];
+        let lastThree = intPart.substring(intPart.length - 3);
+        let otherNumbers = intPart.substring(0, intPart.length - 3);
+        if (otherNumbers !== '') {
+          lastThree = ',' + lastThree;
+          otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+        }
+        let formattedInt = otherNumbers + lastThree;
+        return escapeHtml(formattedInt + '.' + parts[1]);
+      }
+    }
+
+    
+    return escapeHtml(val);
+  }
+
+  function escapeHtml(v){
+    if(v===undefined||v===null) return '';
+    return v.toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function onServerError(err){
+    alert('सर्भर त्रुटि: ' + (err && err.message ? err.message : err));
+  }
 </script>
 </body>
 </html>
