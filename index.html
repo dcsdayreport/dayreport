@@ -304,7 +304,7 @@
       <h2>New Data Entry - आफुले Entry गर्न चाहेको मिति खोज्नुहोस् पहिला !!!</h2>
       <div class="field-row">
         <div class="field">
-          <!-- [COMMENTS: Requirement #3] सबै date box हरूमा yyyy.mm.dd भनेर देखाइएको छ -->
+          
           <label>मिति (YYYY.MM.DD) *</label>
           <input type="text" id="entrySearchDate" placeholder="YYYY.MM.DD">
         </div>
@@ -344,7 +344,7 @@
       <h2 class="no-print">Report</h2>
       <div class="field-row no-print">
         <div class="field">
-          <!-- [COMMENTS: Requirement #3] From Date र To Date बक्सहरूमा yyyy.mm.dd स्पष्ट देखिने गरी राखिएको छ -->
+          
           <label>From Date (YYYY.MM.DD) *</label>
           <input type="text" id="reportFromDate" placeholder="YYYY.MM.DD">
         </div>
@@ -749,7 +749,7 @@
       : escapeHtml(res.dcsName) + ' | ' + escapeHtml(res.fromDate) + ' देखि ' + escapeHtml(res.toDate) + ' सम्म';
     let html = '<div id="reportPrintArea">';
     html += '<div class="report-header"><div class="logo-badge"><img src="'+LOGO_URL+'" alt="Logo"></div>';
-    html += '<h2>Nepal Electricity Authority</h2><h3>Koshi Province, Biratnagar</h3><h3>DCS Daily Report</h3></div>';
+    html += '<h2>Nepal Electricity Authority</h2><h3>Koshi Provincial Office, Biratnagar</h3><h3>DCS Daily Report</h3></div>';
     html += '<div class="report-meta">'+metaText+'</div>';
     return html;
   }
