@@ -627,7 +627,7 @@
     label.textContent = h;
     const input = document.createElement('input');
     input.type = 'text';
-    input.id = 'f_' + safeId(h);
+    input.id = 'f_' + FIELD_HEADERS.indexOf(h); 
     input.dataset.header = h;
     if(isEdit && currentEditRow && currentEditRow[h] !== undefined) input.value = currentEditRow[h];
     wrap.appendChild(label); wrap.appendChild(input);
@@ -650,9 +650,9 @@
     payload[DATE_HEADER] = date;
     payload[CODE_HEADER] = code;
 
-    FIELD_HEADERS.forEach(function(h){
+    FIELD_HEADERS.forEach(function(h, idx){
       if(h===DATE_HEADER || h===CODE_HEADER || h===DCS_HEADER) return;
-      const el = document.getElementById('f_' + safeId(h));
+      const el = document.getElementById('f_' + idx);
       payload[h] = el ? el.value : '';
     });
 
@@ -749,7 +749,7 @@
       : escapeHtml(res.dcsName) + ' | ' + escapeHtml(res.fromDate) + ' देखि ' + escapeHtml(res.toDate) + ' सम्म';
     let html = '<div id="reportPrintArea">';
     html += '<div class="report-header"><div class="logo-badge"><img src="'+LOGO_URL+'" alt="Logo"></div>';
-    html += '<h2>Nepal Electricity Authority</h2><h3>Koshi Provincial Office, Biratnagar</h3><h3>DCS Daily Report</h3></div>';
+    html += '<h2>Nepal Electricity Authority</h2><h3>Koshi Provicial Office, Biratnagar</h3><h3>DCS Daily Report</h3></div>';
     html += '<div class="report-meta">'+metaText+'</div>';
     return html;
   }
